@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 // Pixel Mascot Component
 const Mascot = ({ mood = 'happy' }: { mood?: 'happy' | 'sad' | 'thinking' }) => {
   return (
@@ -68,30 +70,34 @@ export default function Home() {
         {/* Game Mode Cards */}
         <div className="flex flex-col md:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
           {/* Sequential Mode */}
-          <div className="flex-1 bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8 hover:shadow-[12px_12px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100 cursor-pointer">
-            <div className="text-center">
-              <div className="mb-6">
-                <div className="w-24 h-24 bg-[#FF99CC] border-[4px] border-[#333] mx-auto flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(51,51,51,1)]">
-                  <span className="text-[#333] text-2xl font-black">123</span>
+          <Link href="/sequential" className="flex-1">
+            <div className="h-full bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8 hover:shadow-[12px_12px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100 cursor-pointer">
+              <div className="text-center">
+                <div className="mb-6">
+                  <div className="w-24 h-24 bg-[#FF99CC] border-[4px] border-[#333] mx-auto flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(51,51,51,1)]">
+                    <span className="text-[#333] text-2xl font-black">123</span>
+                  </div>
                 </div>
+                <h2 className="text-2xl font-black text-[#333] mb-4 tracking-wider">SEQUENTIAL</h2>
+                <p className="text-[#666] font-bold text-sm tracking-wide">Recite digits in order</p>
               </div>
-              <h2 className="text-2xl font-black text-[#333] mb-4 tracking-wider">SEQUENTIAL</h2>
-              <p className="text-[#666] font-bold text-sm tracking-wide">Recite digits in order</p>
             </div>
-          </div>
+          </Link>
 
           {/* Quiz Mode */}
-          <div className="flex-1 bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8 hover:shadow-[12px_12px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100 cursor-pointer">
-            <div className="text-center">
-              <div className="mb-6">
-                <div className="w-24 h-24 bg-[#66CCFF] border-[4px] border-[#333] mx-auto flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(51,51,51,1)]">
-                  <span className="text-[#333] text-3xl font-black">?</span>
+          <Link href="/quiz" className="flex-1">
+            <div className="h-full bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8 hover:shadow-[12px_12px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100 cursor-pointer">
+              <div className="text-center">
+                <div className="mb-6">
+                  <div className="w-24 h-24 bg-[#66CCFF] border-[4px] border-[#333] mx-auto flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(51,51,51,1)]">
+                    <span className="text-[#333] text-3xl font-black">?</span>
+                  </div>
                 </div>
+                <h2 className="text-2xl font-black text-[#333] mb-4 tracking-wider">QUIZ</h2>
+                <p className="text-[#666] font-bold text-sm tracking-wide">Guess digit at position X</p>
               </div>
-              <h2 className="text-2xl font-black text-[#333] mb-4 tracking-wider">QUIZ</h2>
-              <p className="text-[#666] font-bold text-sm tracking-wide">Guess digit at position X</p>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

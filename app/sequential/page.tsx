@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
 // Pixel Mascot Component
@@ -30,12 +30,26 @@ export default function SequentialMode() {
   const [gameId, setGameId] = useState<string | null>(null);
   const [mode, setMode] = useState<'standard' | 'custom'>('standard');
   const [customStart, setCustomStart] = useState('1');
+  const [startPosition, setStartPosition] = useState(1);
   const [input, setInput] = useState('');
   const [score, setScore] = useState(0);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [piDigits, setPiDigits] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Load Pi digits from file on component mount
+  useEffect(() => {
+    fetch('/pi.txt')
+      .then(res => res.text())
+      .then(text => {
+        // Remove any whitespace, newlines, and the "3." prefix if present
+        const digits = text.replace(/\s/g, '').replace(/^3\./, '');
+        setPiDigits(digits);
+      })
+      .catch(err => console.error('Failed to load Pi digits:', err));
+  }, []);
 
   const startGame = async () => {
     setIsLoading(true);
@@ -61,12 +75,14 @@ export default function SequentialMode() {
       }
       
       setGameId(data.game_id);
+      setStartPosition(data.current_position);
       setGameStarted(true);
       setInput('');
       setScore(0);
       setError(false);
       
       console.log('Game started with ID:', data.game_id);
+      console.log('Start position:', data.current_position);
       
       setTimeout(() => inputRef.current?.focus(), 100);
     } catch (error) {
@@ -159,7 +175,9 @@ export default function SequentialMode() {
               <div className="space-y-4 mb-6">
                 <div onClick={() => setMode('standard')} className={`border-[4px] p-4 cursor-pointer transition-all ${mode === 'standard' ? 'border-[#FF99CC] bg-[#FF99CC] bg-opacity-10' : 'border-[#333] hover:border-[#666]'}`}>
                   <div className="flex items-center gap-3">
-                    <div className={`w-6 h-6 border-[3px] border-[#333] ${mode === 'standard' ? 'bg-[#FF99CC]' : 'bg-white'}`}></div>
+                    <div className={`w-6 h-6 border-[3px] border-[#333] flex items-center justify-center ${mode === 'standard' ? 'bg-[#FF99CC]' : 'bg-white'}`}>
+                      {mode === 'standard' && <span className="text-white text-lg font-black">✓</span>}
+                    </div>
                     <div>
                       <div className="font-black text-[#333]">STANDARD</div>
                       <div className="text-sm text-[#666]">Start from position 1</div>
@@ -168,7 +186,9 @@ export default function SequentialMode() {
                 </div>
                 <div onClick={() => setMode('custom')} className={`border-[4px] p-4 cursor-pointer transition-all ${mode === 'custom' ? 'border-[#FF99CC] bg-[#FF99CC] bg-opacity-10' : 'border-[#333] hover:border-[#666]'}`}>
                   <div className="flex items-center gap-3">
-                    <div className={`w-6 h-6 border-[3px] border-[#333] ${mode === 'custom' ? 'bg-[#FF99CC]' : 'bg-white'}`}></div>
+                    <div className={`w-6 h-6 border-[3px] border-[#333] flex items-center justify-center ${mode === 'custom' ? 'bg-[#FF99CC]' : 'bg-white'}`}>
+                      {mode === 'custom' && <span className="text-white text-lg font-black">✓</span>}
+                    </div>
                     <div>
                       <div className="font-black text-[#333]">CUSTOM START</div>
                       <div className="text-sm text-[#666]">Choose your starting position</div>
@@ -219,6 +239,13 @@ export default function SequentialMode() {
                 <div className="w-12 h-16 bg-[#E5E5E5] border-[4px] border-[#333] flex items-center justify-center text-2xl font-black text-[#333]">
                   .
                 </div>
+                
+                {/* Previous digits (for custom start position) */}
+                {startPosition > 1 && piDigits && piDigits.slice(0, startPosition - 1).split('').map((char, i) => (
+                  <div key={`prev-${i}`} className="w-12 h-16 bg-[#E5E5E5] border-[4px] border-[#333] flex items-center justify-center text-2xl font-black text-[#999]">
+                    {char}
+                  </div>
+                ))}
                 
                 {input.split('').map((char, i) => (
                   <div key={i} className="w-12 h-16 bg-[#99FF99] border-[4px] border-[#333] flex items-center justify-center text-2xl font-black">{char}</div>
