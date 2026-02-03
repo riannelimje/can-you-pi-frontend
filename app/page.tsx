@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 // Pixel Mascot Component
@@ -29,6 +32,39 @@ const Mascot = ({ mood = 'happy' }: { mood?: 'happy' | 'sad' | 'thinking' }) => 
 };
 
 export default function Home() {
+  const [highScore, setHighScore] = useState(0);
+
+  useEffect(() => {
+    // Load high score from localStorage
+    const savedHighScore = localStorage.getItem('piHighScore');
+    if (savedHighScore) {
+      setHighScore(parseInt(savedHighScore));
+    }
+
+    // Listen for storage changes (updates from other tabs/windows)
+    const handleStorageChange = () => {
+      const updatedScore = localStorage.getItem('piHighScore');
+      if (updatedScore) {
+        setHighScore(parseInt(updatedScore));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also poll for changes within the same tab
+    const interval = setInterval(() => {
+      const currentScore = localStorage.getItem('piHighScore');
+      if (currentScore && parseInt(currentScore) !== highScore) {
+        setHighScore(parseInt(currentScore));
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [highScore]);
+
   return (
     <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-hidden selection:bg-[#FF99CC] selection:text-white">
       {/* Grid Background Pattern */}
@@ -49,7 +85,7 @@ export default function Home() {
         <div className="flex justify-start mb-8">
           <div className="bg-[#ffffff] border-[4px] border-[#333] p-6 shadow-[8px_8px_0px_0px_rgba(51,51,51,1)]">
             <div className="text-[#666] text-sm font-black mb-2 tracking-wider">HIGH SCORE</div>
-            <div className="text-[#FF99CC] text-4xl font-black">0 ■</div>
+            <div className="text-[#FF99CC] text-4xl font-black">{highScore} ■</div>
           </div>
         </div>
 

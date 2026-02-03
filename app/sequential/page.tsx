@@ -51,6 +51,16 @@ export default function SequentialMode() {
       .catch(err => console.error('Failed to load Pi digits:', err));
   }, []);
 
+  // Update high score in localStorage when score changes
+  useEffect(() => {
+    if (score > 0) {
+      const currentHighScore = parseInt(localStorage.getItem('piHighScore') || '0');
+      if (score > currentHighScore) {
+        localStorage.setItem('piHighScore', score.toString());
+      }
+    }
+  }, [score]);
+
   const startGame = async () => {
     setIsLoading(true);
     setErrorMessage('');
