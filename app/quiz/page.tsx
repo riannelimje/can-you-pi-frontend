@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Mascot from '../components/Mascot';
 
 export default function QuizMode() {
   const [quizStarted, setQuizStarted] = useState(false);
