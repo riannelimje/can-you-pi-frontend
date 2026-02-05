@@ -131,9 +131,9 @@ export default function Terminal() {
         π
       </div>
 
-      <div className="relative container mx-auto px-8 py-12 max-w-5xl">
+      <div className="relative container mx-auto px-8 py-6 max-w-4xl">
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-4">
           <Link href="/">
             <button className="bg-[#ffffff] border-[4px] border-[#333] px-6 py-3 font-black text-[#333] shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100">
               ← BACK
@@ -159,7 +159,7 @@ export default function Terminal() {
           </div>
 
           {/* Terminal Content */}
-          <div className="bg-[#2D2D2D] p-6 min-h-[500px] max-h-[500px] overflow-y-auto custom-scrollbar">
+          <div className="bg-[#2D2D2D] p-6 h-[350px] overflow-y-auto custom-scrollbar">
             <div className="space-y-3">
               {messages.map((message, index) => (
                 <div key={index} className="flex gap-2">
@@ -225,7 +225,7 @@ export default function Terminal() {
         </div>
 
         {/* Help Text */}
-        <div className="mt-6 text-center">
+        <div className="mt-4 text-center">
           <p className="text-[#666] font-bold text-sm">
             💡 Try typing <span className="text-[#CEA2FD]">help</span>, <span className="text-[#CEA2FD]">pi 20</span>, or <span className="text-[#CEA2FD]">fact</span>
           </p>
