@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
 export default function Terminal() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Array<{ type: 'user' | 'ai' | 'system', text: string }>>([
@@ -11,6 +13,7 @@ export default function Terminal() {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [mascotMood, setMascotMood] = useState<'happy' | 'sad' | 'thinking'>('happy');
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -22,91 +25,91 @@ export default function Terminal() {
     scrollToBottom();
   }, [messages]);
 
-  const handleCommand = (cmd: string) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
+  const handleCommand = async (cmd: string) => {
+    const trimmedCmd = cmd.trim();
     
     if (trimmedCmd === '') return;
 
+    // Handle local commands first
+    if (trimmedCmd.toLowerCase() === 'clear') {
+      setMessages([
+        { type: 'system', text: 'Terminal cleared! ✨' },
+      ]);
+      setInput('');
+      setMascotMood('happy');
+      return;
+    }
+
+    if (trimmedCmd.toLowerCase() === 'home') {
+      window.location.href = '/';
+      return;
+    }
+
+    if (trimmedCmd.toLowerCase() === 'help') {
+      setMessages(prev => [...prev, 
+        { type: 'user', text: cmd },
+        { type: 'ai', text: `Available commands:
+        • help - Show this help message
+        • clear - Clear the terminal
+        • start - start a pi memorisation game
+        • home - Go back to home page
+
+        Or just chat with me! I can help you:
+        • Start a Pi memorisation game
+        • Verify your Pi sequences
+        • Give hints and encouragement
+        • Play position guessing games
+
+        Try saying "Let's play!" or "Start a game!"` }
+      ]);
+      setInput('');
+      setMascotMood('happy');
+      return;
+    }
+
+    // Add user message
     setMessages(prev => [...prev, { type: 'user', text: cmd }]);
     setInput('');
     setIsTyping(true);
     setMascotMood('thinking');
 
-    // Simulate AI thinking delay
-    setTimeout(() => {
-      let response = '';
-      
-      switch (trimmedCmd) {
-        case 'help':
-          response = `Available commands:
-            • help - Show this help message
-            • pi [n] - Get first n digits of pi (e.g., "pi 10")
-            • fact - Get a fun pi fact
-            • clear - Clear the terminal
-            • home - Go back to home page
-            `;
-          setMascotMood('happy');
-          break;
-        
-        case 'clear':
-          setMessages([
-            { type: 'system', text: 'Terminal cleared! ✨' },
-          ]);
-          setMascotMood('happy');
-          setIsTyping(false);
-          return;
-        
-        case 'home':
-          window.location.href = '/';
-          return;
-        
-        case 'fact':
-          const facts = [
-            'Pi is infinite and never repeats! It goes on forever without any pattern.',
-            'The symbol π was first used by mathematician William Jones in 1706.',
-            'Pi Day is celebrated on March 14th (3/14) every year!',
-            'The digits of pi pass randomness tests, appearing truly random.',
-            'Pi is an irrational number, meaning it cannot be expressed as a simple fraction.',
-          ];
-          response = facts[Math.floor(Math.random() * facts.length)];
-          setMascotMood('happy');
-          break;
-        
-        default:
-          if (trimmedCmd.startsWith('pi ')) {
-            const numStr = trimmedCmd.substring(3).trim();
-            const num = parseInt(numStr);
-            
-            if (isNaN(num) || num < 1) {
-              response = 'Please provide a valid number! Example: pi 20';
-              setMascotMood('sad');
-            } else if (num > 100) {
-              response = 'Whoa! That\'s a lot of digits! Let me give you the first 100: 3.' + 
-                        '1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
-              setMascotMood('happy');
-            } else {
-              const piDigits = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
-              response = `First ${num} digits of pi: ${piDigits.substring(0, num + 1).split('').join(' ')}`;
-              setMascotMood('happy');
-            }
-          } else {
-            // General chat responses
-            const chatResponses = [
-              'That\'s interesting! Pi is pretty amazing, right?',
-              'I love talking about pi! Did you know it\'s used in calculating circles?',
-              'Hmm, I\'m just a simple pi terminal, but I think that\'s cool!',
-              'Want to know a pi fact? Type "fact"!',
-              'Pi is my favorite number! What about you?',
-              'That reminds me of the beauty of mathematics!',
-            ];
-            response = chatResponses[Math.floor(Math.random() * chatResponses.length)];
-            setMascotMood('happy');
-          }
+    try {
+      // Call the chat API
+      const response = await fetch(`${API_URL}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: trimmedCmd,
+          conversation_id: conversationId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from AI');
       }
 
-      setMessages(prev => [...prev, { type: 'ai', text: response }]);
+      const data = await response.json();
+      
+      // Update conversation ID if this is a new conversation
+      if (!conversationId) {
+        setConversationId(data.conversation_id);
+      }
+
+      // Add AI response
+      setMessages(prev => [...prev, { type: 'ai', text: data.message }]);
+      setMascotMood('happy');
+    } catch (error) {
+      console.error('Error chatting with AI:', error);
+      setMessages(prev => [...prev, { 
+        type: 'system', 
+        text: 'Oops! Failed to connect to AI. Make sure the backend is running!' 
+      }]);
+      setMascotMood('sad');
+    } finally {
       setIsTyping(false);
-    }, 800 + Math.random() * 700);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -227,7 +230,7 @@ export default function Terminal() {
         {/* Help Text */}
         <div className="mt-4 text-center">
           <p className="text-[#666] font-bold text-sm">
-            💡 Try typing <span className="text-[#CEA2FD]">help</span>, <span className="text-[#CEA2FD]">pi 20</span>, or <span className="text-[#CEA2FD]">fact</span>
+            Try typing <span className="text-[#CEA2FD]">help</span> or <span className="text-[#CEA2FD]">pi 20</span>
           </p>
         </div>
       </div>
