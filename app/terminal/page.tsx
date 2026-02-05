@@ -14,8 +14,16 @@ export default function Terminal() {
   const [isTyping, setIsTyping] = useState(false);
   const [mascotMood, setMascotMood] = useState<'happy' | 'sad' | 'thinking'>('happy');
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [piDigits, setPiDigits] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch('/pi.txt')
+      .then(res => res.text())
+      .then(text => setPiDigits(text.trim()))
+      .catch(err => console.error('Failed to load pi digits:', err));
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -33,7 +41,7 @@ export default function Terminal() {
     // Handle local commands first
     if (trimmedCmd.toLowerCase() === 'clear') {
       setMessages([
-        { type: 'system', text: 'Terminal cleared! ✨' },
+        { type: 'system', text: 'Terminal cleared!' },
       ]);
       setInput('');
       setMascotMood('happy');
@@ -50,8 +58,8 @@ export default function Terminal() {
         { type: 'user', text: cmd },
         { type: 'ai', text: `Available commands:
         • help - Show this help message
+        • pi [n] - Get the nth decimal of pi (e.g., "pi 10" returns 5)
         • clear - Clear the terminal
-        • start - start a pi memorisation game
         • home - Go back to home page
 
         Or just chat with me! I can help you:
@@ -60,7 +68,52 @@ export default function Terminal() {
         • Give hints and encouragement
         • Play position guessing games
 
-        Try saying "Let's play!" or "Start a game!"` }
+        Try saying "Let's play!"` }
+      ]);
+      setInput('');
+      setMascotMood('happy');
+      return;
+    }
+
+    // Handle pi [n] command
+    if (trimmedCmd.toLowerCase().startsWith('pi ')) {
+      const numStr = trimmedCmd.substring(3).trim();
+      const num = parseInt(numStr);
+      
+      if (isNaN(num) || num < 1) {
+        setMessages(prev => [...prev, 
+          { type: 'user', text: cmd },
+          { type: 'ai', text: 'Please provide a valid number! Example: pi 20' }
+        ]);
+        setInput('');
+        setMascotMood('sad');
+        return;
+      }
+
+      if (!piDigits) {
+        setMessages(prev => [...prev, 
+          { type: 'user', text: cmd },
+          { type: 'system', text: 'Loading pi digits...' }
+        ]);
+        setInput('');
+        return;
+      }
+
+      // Get the digit at position n (0-indexed, so subtract 1)
+      if (num > piDigits.length) {
+        setMessages(prev => [...prev, 
+          { type: 'user', text: cmd },
+          { type: 'ai', text: `We only have up to ${piDigits.length} decimal places!` }
+        ]);
+        setInput('');
+        setMascotMood('sad');
+        return;
+      }
+
+      const digit = piDigits[num - 1];
+      setMessages(prev => [...prev, 
+        { type: 'user', text: cmd },
+        { type: 'ai', text: `The ${num}${num === 1 ? 'st' : num === 2 ? 'nd' : num === 3 ? 'rd' : 'th'} decimal of pi is: ${digit}` }
       ]);
       setInput('');
       setMascotMood('happy');
