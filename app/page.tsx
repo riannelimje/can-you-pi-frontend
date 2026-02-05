@@ -107,6 +107,21 @@ export default function Home() {
               </div>
             </div>
           </Link>
+
+          {/* AI Mode */}
+           <Link href="/terminal" className="flex-1">
+            <div className="h-full bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8 hover:shadow-[12px_12px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100 cursor-pointer">
+              <div className="text-center">
+                <div className="mb-6">
+                  <div className="w-24 h-24 bg-[#CEA2FD] border-[4px] border-[#333] mx-auto flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(51,51,51,1)]">
+                    <span className="text-[#333] text-3xl font-black">^_^</span>
+                  </div>
+                </div>
+                <h2 className="text-2xl font-black text-[#333] mb-4 tracking-wider">AI</h2>
+                <p className="text-[#666] font-bold text-sm tracking-wide">Chat with a pi buddy</p>
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
