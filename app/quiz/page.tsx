@@ -82,7 +82,7 @@ export default function QuizMode() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-hidden selection:bg-[#FF99CC] selection:text-white">
+    <div className="h-screen bg-[#ffffff] font-mono relative overflow-hidden selection:bg-[#FF99CC] selection:text-white flex flex-col">
       {/* Grid Background Pattern */}
       <div className="absolute inset-0 opacity-5" 
            style={{
@@ -91,27 +91,27 @@ export default function QuizMode() {
            }}>
       </div>
       
-      <div className="relative container mx-auto px-8 py-12 max-w-3xl">
+      <div className="relative container mx-auto px-4 sm:px-8 py-4 sm:py-6 max-w-3xl flex-1 flex flex-col">
         {/* Back Button */}
         <Link href="/">
-          <button className="bg-[#ffffff] border-[4px] border-[#333] px-6 py-3 font-black shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 mb-8">
+          <button className="bg-[#ffffff] border-[4px] border-[#333] px-4 sm:px-6 py-2 sm:py-3 font-black shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 mb-4">
             ← BACK
           </button>
         </Link>
 
         {/* Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-black mb-4 tracking-tighter">
+        <div className="text-center mb-4 sm:mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-2 tracking-tighter">
             <span className="text-[#66CCFF]">QUIZ</span>{" "}
             <span className="text-[#333]">MODE</span>
           </h1>
-          <p className="text-[#666] font-bold text-sm tracking-wide">Guess the digit at a specific position</p>
+          <p className="text-[#666] font-bold text-xs sm:text-sm tracking-wide">Guess the digit at a specific position</p>
         </div>
 
         {!quizStarted ? (
           /* Start Quiz Screen */
-          <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8">
-            <h2 className="text-2xl font-black text-[#333] mb-6">SETUP QUIZ</h2>
+          <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 overflow-y-auto flex-1">
+            <h2 className="text-xl sm:text-2xl font-black text-[#333] mb-4">SETUP QUIZ</h2>
             
             {/* Position Selection */}
             <div className="space-y-4 mb-6">
@@ -201,13 +201,13 @@ export default function QuizMode() {
           </div>
         ) : (
           /* Quiz Screen */
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 flex-1 flex flex-col">
             {!quizComplete ? (
               <>
                 {/* Question Display */}
-                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-8 text-center">
-                  <div className="text-sm text-[#666] font-black mb-4">QUESTION:</div>
-                  <h2 className="text-3xl font-black text-[#333] mb-2">
+                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 text-center">
+                  <div className="text-xs sm:text-sm text-[#666] font-black mb-2">QUESTION:</div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-[#333] mb-2">
                     What is the digit at position{' '}
                     <span className="text-[#66CCFF]">{position}</span>?
                   </h2>
@@ -215,8 +215,8 @@ export default function QuizMode() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-6">
-                  <label className="block text-sm text-[#666] font-black mb-2">YOUR GUESS:</label>
+                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 flex-1 overflow-y-auto">
+                  <label className="block text-xs sm:text-sm text-[#666] font-black mb-2">YOUR GUESS:</label>
                   <input
                     type="text"
                     maxLength={1}
@@ -229,18 +229,18 @@ export default function QuizMode() {
                     }}
                     onKeyPress={handleKeyPress}
                     disabled={isLoading}
-                    className="w-full border-[4px] border-[#333] p-6 font-black text-6xl text-center focus:outline-none focus:border-[#66CCFF] mb-4"
+                    className="w-full border-[4px] border-[#333] p-4 sm:p-6 font-black text-4xl sm:text-5xl md:text-6xl text-center focus:outline-none focus:border-[#66CCFF] mb-3 sm:mb-4"
                     placeholder="?"
                     autoFocus
                   />
                   
-                  <div className="grid grid-cols-5 gap-2 mb-4">
+                  <div className="grid grid-cols-5 gap-1.5 sm:gap-2 mb-3">
                     {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(digit => (
                       <button
                         key={digit}
                         onClick={() => checkGuess(digit.toString())}
                         disabled={isLoading}
-                        className="bg-[#66CCFF] border-[3px] border-[#333] py-4 font-black text-xl shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50"
+                        className="bg-[#66CCFF] border-[3px] border-[#333] py-2 sm:py-3 font-black text-lg sm:text-xl shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50"
                       >
                         {digit}
                       </button>
@@ -251,7 +251,7 @@ export default function QuizMode() {
                   <button
                     onClick={() => currentGuess && checkGuess(currentGuess)}
                     disabled={isLoading || !currentGuess}
-                    className="w-full bg-[#95E1D3] border-[4px] border-[#333] py-4 font-black text-xl shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full bg-[#95E1D3] border-[4px] border-[#333] py-3 sm:py-4 font-black text-lg sm:text-xl shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     SUBMIT ↵
                   </button>
