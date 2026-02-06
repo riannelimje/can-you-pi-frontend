@@ -44,8 +44,7 @@ export default function Terminal() {
         { type: 'system', text: 'Terminal cleared!' },
       ]);
       setInput('');
-      setMascotMood('happy');
-      return;
+      setMascotMood('happy');      setTimeout(() => inputRef.current?.focus(), 0);      return;
     }
 
     if (trimmedCmd.toLowerCase() === 'home') {
@@ -72,6 +71,7 @@ export default function Terminal() {
       ]);
       setInput('');
       setMascotMood('happy');
+      setTimeout(() => inputRef.current?.focus(), 0);
       return;
     }
 
@@ -87,6 +87,7 @@ export default function Terminal() {
         ]);
         setInput('');
         setMascotMood('sad');
+        setTimeout(() => inputRef.current?.focus(), 0);
         return;
       }
 
@@ -96,6 +97,7 @@ export default function Terminal() {
           { type: 'system', text: 'Loading pi digits...' }
         ]);
         setInput('');
+        setTimeout(() => inputRef.current?.focus(), 0);
         return;
       }
 
@@ -107,6 +109,7 @@ export default function Terminal() {
         ]);
         setInput('');
         setMascotMood('sad');
+        setTimeout(() => inputRef.current?.focus(), 0);
         return;
       }
 
@@ -117,6 +120,7 @@ export default function Terminal() {
       ]);
       setInput('');
       setMascotMood('happy');
+      setTimeout(() => inputRef.current?.focus(), 0);
       return;
     }
 
@@ -162,6 +166,7 @@ export default function Terminal() {
       setMascotMood('sad');
     } finally {
       setIsTyping(false);
+      setTimeout(() => inputRef.current?.focus(), 0);
     }
   };
 
