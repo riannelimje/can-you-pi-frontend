@@ -234,7 +234,7 @@ export default function QuizMode() {
                     autoFocus
                   />
                   
-                  <div className="grid grid-cols-5 gap-2">
+                  <div className="grid grid-cols-5 gap-2 mb-4">
                     {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(digit => (
                       <button
                         key={digit}
@@ -246,6 +246,15 @@ export default function QuizMode() {
                       </button>
                     ))}
                   </div>
+
+                  {/* Enter/Submit Button */}
+                  <button
+                    onClick={() => currentGuess && checkGuess(currentGuess)}
+                    disabled={isLoading || !currentGuess}
+                    className="w-full bg-[#95E1D3] border-[4px] border-[#333] py-4 font-black text-xl shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    SUBMIT ↵
+                  </button>
                 </div>
               </>
             ) : (
