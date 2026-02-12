@@ -64,7 +64,11 @@ export default function Home() {
 
         {/* Character */}
         <div className="flex justify-center mb-6">
-          <Mascot mood="happy" />
+          <Mascot
+            mood="happy"
+            href="https://github.com/riannelimje/can-you-pi"
+            tooltip="View on GitHub"
+          />
         </div>
 
         {/* Title */}
