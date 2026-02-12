@@ -15,6 +15,7 @@ export default function Terminal() {
   const [mascotMood, setMascotMood] = useState<'happy' | 'sad' | 'thinking'>('happy');
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [piDigits, setPiDigits] = useState<string>('');
+  const [infoOpen, setInfoOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -286,10 +287,25 @@ export default function Terminal() {
         </div>
 
         {/* Help Text */}
-        <div className="mt-4 text-center">
+        <div className="mt-4 flex items-center justify-center gap-3">
           <p className="text-[#666] font-bold text-sm">
             Try typing <span className="text-[#CEA2FD]">help</span> or <span className="text-[#CEA2FD]">pi 20</span>
           </p>
+          <div className="relative group">
+            <button
+              type="button"
+              aria-label="Info"
+              aria-expanded={infoOpen}
+              onClick={() => setInfoOpen((open) => !open)}
+              onBlur={() => setInfoOpen(false)}
+              className="w-7 h-7 rounded-full bg-[#ffffff] border-[3px] border-[#333] text-[#333] font-black text-sm shadow-[2px_2px_0px_0px_rgba(51,51,51,1)]"
+            >
+              i
+            </button>
+            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 sm:w-72 bg-[#ffffff] border-[3px] border-[#333] p-3 text-xs font-bold text-[#333] shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 ${infoOpen ? 'opacity-100 pointer-events-auto' : ''}`}>
+              If you see oops! the token limit might be reached, try typing "start" or try again after a while.
+            </div>
+          </div>
         </div>
       </div>
 
