@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://can-you-pi-1041928881529.us-central1.run.app/api';
 
 export default function Terminal() {
   const [input, setInput] = useState('');

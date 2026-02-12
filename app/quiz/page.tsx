@@ -22,7 +22,7 @@ export default function QuizMode() {
     setIsLoading(true);
     setMessage('');
     try {
-      const response = await fetch('http://localhost:8000/api/quiz/start', {
+      const response = await fetch('https://can-you-pi-1041928881529.us-central1.run.app/api/quiz/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -47,7 +47,7 @@ export default function QuizMode() {
     
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/quiz/${quizId}/check`, {
+      const response = await fetch(`https://can-you-pi-1041928881529.us-central1.run.app/api/quiz/${quizId}/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ guess })
