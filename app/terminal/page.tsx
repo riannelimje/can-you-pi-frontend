@@ -192,7 +192,7 @@ export default function Terminal() {
         π
       </div>
 
-      <div className="relative container mx-auto px-8 py-6 max-w-4xl">
+      <div className="relative container mx-auto px-4 sm:px-8 py-6 max-w-4xl">
         {/* Back Button */}
         <div className="mb-4">
           <Link href="/">
@@ -261,7 +261,7 @@ export default function Terminal() {
 
           {/* Terminal Input */}
           <div className="bg-[#2D2D2D] border-t-[4px] border-[#333] p-4">
-            <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+            <form onSubmit={handleSubmit} className="flex gap-2 items-center min-w-0">
               <span className="text-[#FF99CC] font-black">YOU</span>
               <span className="text-[#FF99CC]">▸</span>
               <input
@@ -270,14 +270,14 @@ export default function Terminal() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isTyping}
-                className="flex-1 bg-transparent text-[#ffffff] outline-none font-mono placeholder:text-[#666666]"
+                className="flex-1 min-w-0 bg-transparent text-[#ffffff] outline-none font-mono placeholder:text-[#666666]"
                 placeholder="Type a command or message..."
                 autoFocus
               />
               <button
                 type="submit"
                 disabled={isTyping || !input.trim()}
-                className="bg-[#CEA2FD] border-[3px] border-[#333] px-4 py-2 font-black text-[#333] shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] disabled:hover:translate-x-0 disabled:hover:translate-y-0"
+                className="shrink-0 bg-[#CEA2FD] border-[3px] border-[#333] px-4 py-2 font-black text-[#333] shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] disabled:hover:translate-x-0 disabled:hover:translate-y-0"
               >
                 SEND
               </button>
