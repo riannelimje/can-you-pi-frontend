@@ -82,7 +82,7 @@ export default function QuizMode() {
   };
 
   return (
-    <div className="h-screen bg-[#ffffff] font-mono relative overflow-hidden selection:bg-[#FF99CC] selection:text-white flex flex-col">
+    <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-x-hidden selection:bg-[#FF99CC] selection:text-white flex flex-col">
       {/* Grid Background Pattern */}
       <div className="absolute inset-0 opacity-5" 
            style={{
@@ -215,7 +215,7 @@ export default function QuizMode() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 flex-1 overflow-y-auto">
+                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 pb-6">
                   <label className="block text-xs sm:text-sm text-[#666] font-black mb-2">YOUR GUESS:</label>
                   <input
                     type="text"
@@ -238,7 +238,7 @@ export default function QuizMode() {
                     {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(digit => (
                       <button
                         key={digit}
-                        onClick={() => checkGuess(digit.toString())}
+                        onClick={() => setCurrentGuess(digit.toString())}
                         disabled={isLoading}
                         className="bg-[#66CCFF] border-[3px] border-[#333] py-2 sm:py-3 font-black text-lg sm:text-xl shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50"
                       >
