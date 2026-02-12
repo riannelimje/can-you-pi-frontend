@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Can You Pi? 
+
+An interactive web game to test and improve your knowledge of Pi (π) digits. Challenge yourself with three unique game modes: Sequential, Quiz, and AI Buddy.
+
+## Features
+
+- **Sequential Mode**: Recite Pi digits in order and track your progress
+- **Quiz Mode**: Guess the digit at a specific position with customizable difficulty
+- **AI Buddy Mode**: Chat with an AI assistant that can help you learn Pi, provide hints, and play interactive games
+- **High Score Tracking**: Your best scores are saved locally across sessions
+- **Responsive Design**: Optimized for both desktop and mobile devices
+- **Retro Aesthetic**: Clean, bold neo-brutalist design with smooth animations
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org) with React 19
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Backend**: Python FastAPI ([Backend Repo](https://github.com/riannelimje/can-you-pi))
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 20+ and npm installed
+- Backend server running (see [backend repo](https://github.com/riannelimje/can-you-pi))
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/riannelimje/can-you-pi-frontend.git
+cd can-you-pi-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create a `.env.local` file and add your backend URL:
+```bash
+NEXT_PUBLIC_API_URL=https://your-backend-url.com/api
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+npm run dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+├── components/     # Reusable components (Mascot, etc.)
+├── quiz/          # Quiz mode page
+├── sequential/    # Sequential mode page
+├── terminal/      # AI Buddy terminal page
+├── layout.tsx     # Root layout
+└── page.tsx       # Home page
+public/
+└── pi.txt         # Pi digits data
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
