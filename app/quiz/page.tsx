@@ -75,9 +75,22 @@ export default function QuizMode() {
     setExpectedDigit(null);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (quizComplete || isLoading) return;
+    // Number keys (both main keyboard and numpad)
+    if (/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+      setCurrentGuess(e.key);
+    }
+    // Enter to submit
     if (e.key === 'Enter' && currentGuess.length === 1) {
+      e.preventDefault();
       checkGuess(currentGuess);
+    }
+    // Backspace/Delete to clear
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      e.preventDefault();
+      setCurrentGuess('');
     }
   };
 
@@ -215,46 +228,85 @@ export default function QuizMode() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 pb-6">
-                  <label className="block text-xs sm:text-sm text-[#666] font-black mb-2">YOUR GUESS:</label>
-                  <input
-                    type="text"
-                    maxLength={1}
-                    value={currentGuess}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val === '' || /^\d$/.test(val)) {
-                        setCurrentGuess(val);
-                      }
-                    }}
-                    onKeyPress={handleKeyPress}
-                    disabled={isLoading}
-                    className="w-full border-[4px] border-[#333] p-4 sm:p-6 font-black text-4xl sm:text-5xl md:text-6xl text-center focus:outline-none focus:border-[#66CCFF] mb-3 sm:mb-4"
-                    placeholder="?"
-                    autoFocus
-                  />
-                  
-                  <div className="grid grid-cols-5 gap-1.5 sm:gap-2 mb-3">
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(digit => (
+                {/* Hidden input to capture keyboard events */}
+                <input
+                  ref={(el) => el?.focus()}
+                  type="text"
+                  inputMode="none"
+                  value=""
+                  onChange={() => {}}
+                  onKeyDown={handleKeyDown}
+                  className="absolute opacity-0 w-0 h-0 pointer-events-none"
+                  aria-hidden="true"
+                  autoFocus
+                />
+                <div
+                  className="bg-[#ffffff] border-[4px] border-[#333] shadow-[8px_8px_0px_0px_rgba(51,51,51,1)] p-4 sm:p-6 pb-6"
+                  onClick={(e) => {
+                    // Re-focus hidden input when clicking the card area
+                    const hiddenInput = e.currentTarget.parentElement?.querySelector('input[aria-hidden]') as HTMLInputElement;
+                    hiddenInput?.focus();
+                  }}
+                >
+                  <label className="block text-xs sm:text-sm text-[#666] font-black mb-2 text-center">
+                    TAP A DIGIT (0–9):
+                  </label>
+
+                  {/* Selected Digit Display */}
+                  <div className={`w-full border-[4px] ${currentGuess ? 'border-[#66CCFF] bg-[#66CCFF] bg-opacity-10' : 'border-[#333]'} p-3 sm:p-4 mb-3 sm:mb-4 text-center transition-colors duration-150`}>
+                    <span className={`font-black text-4xl sm:text-5xl md:text-6xl ${currentGuess ? 'text-[#333]' : 'text-[#ccc]'}`}>
+                      {currentGuess || '?'}
+                    </span>
+                  </div>
+
+                  {/* Numpad - phone-style 3-column layout */}
+                  <div className="grid grid-cols-3 gap-2 sm:gap-2.5 mb-3 max-w-xs mx-auto">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(digit => (
                       <button
                         key={digit}
-                        onClick={() => setCurrentGuess(digit.toString())}
+                        onClick={() => setCurrentGuess(prev => prev === digit.toString() ? '' : digit.toString())}
                         disabled={isLoading}
-                        className="bg-[#66CCFF] border-[3px] border-[#333] py-2 sm:py-3 font-black text-lg sm:text-xl shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50"
+                        className={`border-[3px] border-[#333] py-3 sm:py-4 font-black text-xl sm:text-2xl transition-all duration-100 disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none ${
+                          currentGuess === digit.toString()
+                            ? 'bg-[#333] text-white shadow-none translate-x-0.5 translate-y-0.5'
+                            : 'bg-[#66CCFF] shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5'
+                        }`}
                       >
                         {digit}
                       </button>
                     ))}
+                    {/* Bottom row: empty, 0, clear */}
+                    <div></div>
+                    <button
+                      onClick={() => setCurrentGuess(prev => prev === '0' ? '' : '0')}
+                      disabled={isLoading}
+                      className={`border-[3px] border-[#333] py-3 sm:py-4 font-black text-xl sm:text-2xl transition-all duration-100 disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none ${
+                        currentGuess === '0'
+                          ? 'bg-[#333] text-white shadow-none translate-x-0.5 translate-y-0.5'
+                          : 'bg-[#66CCFF] shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5'
+                      }`}
+                    >
+                      0
+                    </button>
+                    <button
+                      onClick={() => setCurrentGuess('')}
+                      disabled={isLoading || !currentGuess}
+                      className="bg-[#FFB6C1] border-[3px] border-[#333] py-3 sm:py-4 font-black text-lg sm:text-xl shadow-[3px_3px_0px_0px_rgba(51,51,51,1)] hover:shadow-[5px_5px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+                    >
+                      ✕
+                    </button>
                   </div>
 
-                  {/* Enter/Submit Button */}
-                  <button
-                    onClick={() => currentGuess && checkGuess(currentGuess)}
-                    disabled={isLoading || !currentGuess}
-                    className="w-full bg-[#95E1D3] border-[4px] border-[#333] py-3 sm:py-4 font-black text-lg sm:text-xl shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    SUBMIT ↵
-                  </button>
+                  {/* Submit Button */}
+                  <div className="max-w-xs mx-auto">
+                    <button
+                      onClick={() => currentGuess && checkGuess(currentGuess)}
+                      disabled={isLoading || !currentGuess}
+                      className="w-full bg-[#95E1D3] border-[4px] border-[#333] py-3 sm:py-4 font-black text-lg sm:text-xl shadow-[4px_4px_0px_0px_rgba(51,51,51,1)] hover:shadow-[6px_6px_0px_0px_rgba(51,51,51,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+                    >
+                      SUBMIT ↵
+                    </button>
+                  </div>
                 </div>
               </>
             ) : (
