@@ -39,7 +39,7 @@ export default function Home() {
   }, [highScore]);
 
   return (
-    <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-hidden selection:bg-[#FF99CC] selection:text-white">
+    <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-x-hidden selection:bg-[#FF99CC] selection:text-white">
       {/* Grid Background Pattern */}
       <div className="absolute inset-0 opacity-5" 
            style={{
