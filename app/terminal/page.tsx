@@ -179,7 +179,7 @@ export default function Terminal() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-hidden selection:bg-[#CEA2FD] selection:text-white">
+    <div className="min-h-screen bg-[#ffffff] font-mono relative overflow-x-hidden selection:bg-[#CEA2FD] selection:text-white">
       {/* Grid Background Pattern */}
       <div className="absolute inset-0 opacity-5" 
            style={{
