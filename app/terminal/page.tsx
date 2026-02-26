@@ -162,7 +162,7 @@ export default function Terminal() {
       console.error('Error chatting with AI:', error);
       setMessages(prev => [...prev, { 
         type: 'system', 
-        text: 'Oops! Failed to connect to AI. Make sure the backend is running!' 
+        text: 'Oops! Failed to connect to AI. Please try again!' 
       }]);
       setMascotMood('sad');
     } finally {
