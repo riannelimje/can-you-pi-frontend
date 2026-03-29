@@ -38,10 +38,13 @@ cd can-you-pi-frontend
 npm install
 ```
 
-3. Create a `.env.local` file and add your backend URL:
+3. Create a `.env.local` file and add your backend config:
 ```bash
-NEXT_PUBLIC_API_URL=https://your-backend-url.com/api
+API_URL=https://your-backend-url.com/api
+API_BEARER_TOKEN=your_backend_bearer_token
 ```
+
+The frontend calls local `/api/*` routes, and these server routes forward requests to your backend with `Authorization: Bearer <token>`.
 
 4. Run the development server:
 ```bash

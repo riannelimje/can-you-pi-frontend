@@ -51,7 +51,7 @@ export default function SequentialMode() {
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const response = await fetch('https://can-you-pi-1041928881529.us-central1.run.app/api/start', {
+      const response = await fetch('/api/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -112,7 +112,7 @@ export default function SequentialMode() {
     const digit = digitQueueRef.current.shift()!;
 
     try {
-      const response = await fetch(`https://can-you-pi-1041928881529.us-central1.run.app/api/game/${gameIdRef.current}/play`, {
+      const response = await fetch(`/api/game/${gameIdRef.current}/play`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input: digit })

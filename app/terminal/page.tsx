@@ -3,8 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://can-you-pi-1041928881529.us-central1.run.app/api';
-
 export default function Terminal() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Array<{ type: 'user' | 'ai' | 'system', text: string }>>([
@@ -133,7 +131,7 @@ export default function Terminal() {
 
     try {
       // Call the chat API
-      const response = await fetch(`${API_URL}/chat`, {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
